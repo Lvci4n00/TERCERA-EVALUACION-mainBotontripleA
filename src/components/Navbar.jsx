@@ -1,9 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 export default function Navbar({ onOpenAuth }) {
   const [user, setUser] = useState(null);
-  const [isAaaMode, setIsAaaMode] = useState(() => localStorage.getItem('accessibilityMode') === 'aaa');
+  const [showAccessibilityPanel, setShowAccessibilityPanel] = useState(false);
+  const [fontSizeMode, setFontSizeMode] = useState(() => localStorage.getItem('fontSizeMode') || 'normal');
+  const [colorMode, setColorMode] = useState(() => localStorage.getItem('colorMode') || 'aaa-dark');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,15 +15,20 @@ export default function Navbar({ onOpenAuth }) {
   }, []);
 
   useEffect(() => {
-    document.documentElement.dataset.accessibility = isAaaMode ? 'aaa' : 'default';
-    localStorage.setItem('accessibilityMode', isAaaMode ? 'aaa' : 'default');
-  }, [isAaaMode]);
+    document.documentElement.dataset.fontSize = fontSizeMode;
+    localStorage.setItem('fontSizeMode', fontSizeMode);
+  }, [fontSizeMode]);
+
+  useEffect(() => {
+    document.documentElement.dataset.colorMode = colorMode;
+    localStorage.setItem('colorMode', colorMode);
+  }, [colorMode]);
 
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
     setUser(null);
     navigate('/');
-    window.location.reload(); // Recarga simple para limpiar el estado
+    globalThis.location.reload();
   };
 
   return (
@@ -42,22 +50,53 @@ export default function Navbar({ onOpenAuth }) {
               <button onClick={handleLogout} className="btn">Cerrar sesión</button>
             </>
           ) : (
-            <>
-              <button type="button" onClick={() => onOpenAuth?.()} className="btn auth-btn">Iniciar sesión / Registro</button>
-            </>
+            <button type="button" onClick={() => onOpenAuth?.()} className="btn auth-btn">Iniciar sesión / Registro</button>
           )}
-          <button
-            type="button"
-            className="btn"
-            onClick={() => setIsAaaMode((prev) => !prev)}
-            aria-pressed={isAaaMode}
-            aria-label="Cambiar modo de accesibilidad Triple A"
-          >
-            {isAaaMode ? 'Triple A: Activado' : 'Triple A: Desactivado'}
-          </button>
-          <button type="button" className="btn" onClick={() => window.dispatchEvent(new CustomEvent('open-cart'))} aria-label="Abrir carrito">Carrito</button>
+          <div className="accessibility-wrap">
+            <button
+              type="button"
+              className="btn"
+              onClick={() => setShowAccessibilityPanel((prev) => !prev)}
+              aria-expanded={showAccessibilityPanel}
+              aria-controls="accessibility-panel"
+              aria-label="Abrir opciones de accesibilidad"
+            >
+              Accesibilidad
+            </button>
+
+            {showAccessibilityPanel && (
+              <section id="accessibility-panel" className="accessibility-panel" aria-label="Opciones de accesibilidad">
+                <label htmlFor="font-size-select">Tamaño letra</label>
+                <select
+                  id="font-size-select"
+                  value={fontSizeMode}
+                  onChange={(e) => setFontSizeMode(e.target.value)}
+                >
+                  <option value="normal">Normal</option>
+                  <option value="grande">Grande</option>
+                  <option value="muy-grande">Muy grande</option>
+                </select>
+
+                <label htmlFor="color-mode-select">Colores</label>
+                <select
+                  id="color-mode-select"
+                  value={colorMode}
+                  onChange={(e) => setColorMode(e.target.value)}
+                >
+                  <option value="aaa-dark">Triple A Oscuro</option>
+                  <option value="aaa-light">Triple A Claro</option>
+                  <option value="aaa-blue">Triple A Azul</option>
+                </select>
+              </section>
+            )}
+          </div>
+          <button type="button" className="btn" onClick={() => globalThis.dispatchEvent(new CustomEvent('open-cart'))} aria-label="Abrir carrito">Carrito</button>
         </div>
       </div>
     </header>
   );
 }
+
+Navbar.propTypes = {
+  onOpenAuth: PropTypes.func,
+};
