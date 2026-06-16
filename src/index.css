@@ -1,0 +1,425 @@
+/* WCAG 2.1 AA baseline: contraste alto, foco visible, legibilidad, reduce motion */
+
+/* 1) Tokens */
+:root{
+  color-scheme: dark;
+
+  --bg: #0b1220;          /* fondo */
+  --surface: #0f1a2f;     /* cards */
+  --surface-2: #111f3a;
+  --text: #f2f6ff;        /* texto principal */
+  --muted: #c9d4ea;       /* texto secundario (alto contraste) */
+  --border: #2a3a63;
+
+  --link: #8ab4ff;        /* enlaces */
+  --link-hover: #b7d0ff;
+
+  --primary: #2f6bff;     /* botón */
+  --primary-hover: #2457d8;
+  --on-primary: #061026;
+
+  --focus: #ffd54a;       /* anillo de foco muy visible */
+  --danger: #ff5c5c;
+
+  --radius: 12px;
+
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+
+  --maxw: 1000px;
+  --pad: 1rem;
+
+  /* Tipografía */
+  --base-size: 16px;
+  --line: 1.6;
+}
+
+html[data-accessibility='aaa']{
+  --bg: #000000;
+  --surface: #000000;
+  --surface-2: #0a0a0a;
+  --text: #ffffff;
+  --muted: #f2f2f2;
+  --border: #ffffff;
+  --link: #9ed0ff;
+  --link-hover: #c7e4ff;
+  --primary: #ffdd00;
+  --primary-hover: #ffe75c;
+  --on-primary: #000000;
+  --focus: #00ffff;
+  --base-size: 18px;
+  --line: 1.8;
+}
+
+/* 2) Reset seguro */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { font-size: var(--base-size); }
+
+body{
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  line-height: var(--line);
+  background: var(--bg);
+  color: var(--text);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 3) Layout */
+.container{
+  width: min(var(--maxw), calc(100% - 2 * var(--pad)));
+  margin-inline: auto;
+}
+
+.site-header,
+.site-footer{
+  padding-block: 1rem;
+}
+
+hr{
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 1rem 0 0 0;
+}
+
+/* 4) Tipografía */
+h1,h2,h3{
+  line-height: 1.2;
+  margin: 0 0 .5rem 0;
+}
+p{ margin: .5rem 0; }
+.precio{ color: var(--muted); }
+
+/* 5) Enlaces (AA + foco visible) */
+a{
+  color: var(--link);
+  text-decoration: underline;
+  text-decoration-thickness: .12em;
+  text-underline-offset: .18em;
+}
+a:hover{ color: var(--link-hover); }
+a:visited{ color: #c5a6ff; }
+
+/* 6) Navegación */
+.site-nav{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+  align-items: center;
+}
+.site-nav span[aria-hidden="true"]{
+  color: var(--muted);
+}
+
+/* 7) Tarjetas de producto */
+.grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.producto{
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.producto img{
+  display: block;
+  width: 100%;
+  height: 200px; /* altura consistente para todas las imágenes */
+  object-fit: cover; /* recorta y centra la imagen visualmente */
+  border-radius: calc(var(--radius) - 2px);
+  margin: .75rem 0 1rem 0;
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+/* 8) Botones (tamaño, foco, contraste) */
+button,
+.btn{
+  font: inherit;
+}
+
+.btn,
+button{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+
+  padding: .75rem 1rem;     /* objetivo táctil cómodo */
+  min-height: 44px;         /* recomendado para accesibilidad */
+  min-width: 44px;
+
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn:hover,
+button:hover{
+  background: var(--primary-hover);
+}
+
+.btn:active,
+button:active{
+  transform: translateY(1px);
+}
+
+/* 9) Foco visible (muy importante AA) */
+:focus{ outline: none; }
+
+:focus-visible{
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+html[data-accessibility='aaa'] :focus-visible{
+  outline-width: 4px;
+  outline-offset: 4px;
+}
+
+/* Mejora: si el foco cae en elementos dentro de cards, que se note */
+.producto:focus-within{
+  border-color: rgba(255, 213, 74, .75);
+  box-shadow: 0 0 0 3px rgba(255, 213, 74, .25), var(--shadow);
+}
+
+/* 10) Accesibilidad extra */
+@media (prefers-reduced-motion: reduce){
+  *{
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .btn:active, button:active{ transform: none; }
+}
+
+/* 11) Alto contraste del sistema (Windows) */
+@media (forced-colors: active){
+  :focus-visible{
+    outline: 2px solid Highlight;
+  }
+  .producto{
+    border: 1px solid CanvasText;
+    box-shadow: none;
+  }
+  .btn, button{
+    border: 1px solid ButtonText;
+  }
+}
+
+/* 12) Selección de texto */
+::selection{
+  background: rgba(47, 107, 255, .45);
+}
+
+/* 13) Responsivo mínimo */
+@media (max-width: 480px){
+  .site-nav{ gap: .35rem .6rem; }
+}
+
+/* Separadores entre secciones (utilidad) */
+.spacer{
+  height: 20px;
+}
+
+@media (max-width: 480px){
+  .spacer{ height: 12px; }
+}
+
+/* Contact form styles */
+.section.contact{ padding-bottom: 0; }
+.contact-form{
+  margin-top: 1rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 10px;
+}
+.contact-form h3{ margin-top: 0; margin-bottom: .5rem; }
+.contact-form label{ display:block; margin-top: .5rem; color: var(--muted); font-weight:600; }
+.contact-form input,
+.contact-form textarea{
+  width: 100%;
+  padding: .6rem .75rem;
+  margin-top: .25rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+}
+.contact-form textarea{ resize: vertical; }
+.contact-form .btn{ margin-top: .75rem; }
+.contact-success{ margin-top: .75rem; color: var(--primary); }
+
+@media (max-width: 480px){
+  .contact-form{ padding: .75rem; }
+}
+
+/* Header auth buttons */
+.auth-actions{ display:flex; gap:.5rem; margin-top:.5rem; justify-content:flex-end; }
+.auth-btn{ padding:.45rem .8rem; font-weight:600; background:transparent; color:var(--link); border:1px solid rgba(255,255,255,0.04); }
+.auth-btn:hover{ background:rgba(255,255,255,0.02); color:var(--link-hover); }
+
+/* Footer auth forms */
+.footer-auth-forms{ display:flex; gap:1rem; margin-top:1rem; flex-wrap:wrap; }
+.footer-form{ flex:1 1 320px; background:linear-gradient(180deg, var(--surface), var(--surface-2)); border:1px solid var(--border); padding:1rem; border-radius:10px; }
+.footer-form h3{ margin-top:0; margin-bottom:.5rem; }
+.footer-form label{ display:block; margin-top:.5rem; color:var(--muted); font-weight:600; }
+.footer-form input{ width:100%; padding:.5rem .6rem; margin-top:.25rem; border-radius:8px; border:1px solid var(--border); background:transparent; color:var(--text); }
+.footer-form .btn{ margin-top:.75rem; }
+.form-msg{ margin-top:.5rem; color:var(--primary); }
+
+.footer-columns{
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.footer-main-info,
+.footer-academic-info{
+  flex: 1 1 320px;
+}
+
+.footer-academic-info{
+  text-align: right;
+}
+
+@media (max-width:720px){
+  .footer-auth-forms{ flex-direction:column; }
+  .auth-actions{ justify-content:flex-start; }
+  .footer-columns{ flex-direction: column; gap: 1rem; }
+  .footer-academic-info{ text-align: left; }
+}
+
+/* Alinear el título de la sección Contacto a la izquierda, alinear con el contenido del footer */
+.section.contact .section-header{
+  /* Match the page container width so the title aligns with footer content */
+  width: min(var(--maxw), calc(100% - 2 * var(--pad)));
+  margin-inline: auto;
+  text-align: left;
+}
+.section.contact h2{ text-align:left; margin: 0 0 .5rem 0; }
+
+/* Carrusel de productos */
+.hero-carousel{
+  position: relative;
+  margin: 0 0 1rem 0;
+  overflow: hidden;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 2048px; /* target carousel width */
+  margin-inline: auto;
+  aspect-ratio: 2/1; /* 2048x1024 -> 2:1 */
+  max-height: 70vh; /* prevent excessive height on narrow viewports */
+}
+.hero-carousel .carousel-track{
+  display: flex;
+  transition: transform 400ms ease;
+  will-change: transform;
+  height: 100%;
+  align-items: center;
+}
+.hero-carousel .carousel-slide{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; 
+  padding: 0;
+  height: 100%;
+}
+.hero-carousel .carousel-slide img{
+  width: 100%;
+  height: auto;       /* preserve intrinsic aspect ratio */
+  max-height: 100%;   /* never exceed container height */
+  object-fit: contain; /* show full image when aspect differs */
+  object-position: center center;
+  border-radius: 8px;
+  display:block;
+}
+.hero-carousel .carousel-btn{ display:none; }
+.hero-carousel .carousel-indicators{ display:none; }
+
+@media (min-width:900px){
+  /* keep a larger max width on wide screens */
+  .hero-carousel { max-width: 2048px; }
+  .hero-carousel .carousel-slide{ padding: 6px; }
+}
+
+@media (max-width:720px){
+  /* ensure the carousel doesn't dominate very small screens */
+  .hero-carousel{ max-height: 50vh; }
+}
+
+@media (max-width:600px){
+  /* slightly reduce vertical footprint on narrow viewports */
+  .hero-carousel{ aspect-ratio: 16/9; }
+}
+
+/* Smooth scroll when clicking anchors */
+html{ scroll-behavior: smooth; }
+
+/* Contact modal and floating button */
+.contact-button{
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 1001;
+  padding: .85rem 1rem;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.35);
+}
+
+/* Cart button reuses contact button styles */
+.cart-button{ }
+
+.modal-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(3,8,18,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content{
+  width: 100%;
+  max-width: 720px;
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  position: relative;
+  box-shadow: var(--shadow);
+}
+
+.modal-close{
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+@media (max-width: 480px){
+  .modal-content{ padding: .75rem; }
+  .contact-button{ right: 12px; bottom: 12px; padding: .7rem .9rem; }
+}
