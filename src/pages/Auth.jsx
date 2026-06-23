@@ -26,6 +26,14 @@ export default function Auth() {
     const data = new FormData(e.target);
     const { email, password } = Object.fromEntries(data);
 
+    // Admin credentials (hardcoded as requested)
+    if (email === 'admin@gmail.com' && password === 'admin123') {
+      localStorage.setItem('isAdmin', 'true');
+      localStorage.setItem('currentUser', JSON.stringify({ name: 'admin', email: 'admin123' }));
+      navigate('/admin', { replace: true });
+      return;
+    }
+
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     const user = users.find(u => u.email === email && u.password === password);
 

@@ -1,0 +1,15 @@
+Valida entradas para el registro e inicio de sesión y para el formulario de contacto
+
+Agrega al footer de la pagina
+
+Nombre Alumno: Luciano Castillo
+
+Nombre Profesor: Victor Vasquez
+
+Asignatura: Programación Front End
+
+Seccion: IEI-N3-P2-C2
+
+agrega un boton para cambiar la accesibilidad de la pagina a Triple A
+
+cambia el boton de triple A a uno que diga Accesibilidad para cambiar tamaño letra y colores.

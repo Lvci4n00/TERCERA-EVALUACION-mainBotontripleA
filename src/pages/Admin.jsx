@@ -1,9 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProductForm from '../components/ProductForm';
 import ProductList from '../components/ProductList';
 
 export default function Admin() {
   const [editing, setEditing] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    if (!isAdmin) {
+      navigate('/auth', { replace: true });
+    }
+  }, [navigate]);
 
   return (
     <main className="container" role="main" aria-labelledby="admin-title" style={{ marginTop: '1rem' }}>

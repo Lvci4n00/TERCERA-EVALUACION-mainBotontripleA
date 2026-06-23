@@ -498,6 +498,42 @@ html{ scroll-behavior: smooth; }
   box-shadow: var(--shadow);
 }
 
+/* Floating accessibility FAB and panel */
+.accessibility-fab-wrap{ position: fixed; right: 18px; bottom: 90px; z-index: 1002; }
+.accessibility-fab{
+  padding: .6rem .9rem;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.35);
+  background: var(--primary);
+  color: var(--on-primary);
+  border: 1px solid rgba(0,0,0,.08);
+  font-weight: 700;
+  min-height: 44px;
+}
+.accessibility-fab:focus-visible{ outline-offset: 4px; }
+
+.accessibility-panel-floating{
+  position: fixed;
+  right: 18px;
+  bottom: calc(90px + 56px + .5rem);
+  z-index: 1003;
+  min-width: 240px;
+  padding: .75rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+  display: grid;
+  gap: .5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+.accessibility-panel-floating label{ display:block; color:var(--muted); font-weight:600; }
+.accessibility-panel-floating select{ width:100%; padding:.45rem .5rem; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--text); }
+
+@media (max-width:720px){
+  .accessibility-fab-wrap{ right: 12px; bottom: 86px; }
+  .accessibility-panel-floating{ right: 12px; left: 12px; bottom: calc(86px + 56px + .5rem); }
+}
+
 .modal-close{
   position: absolute;
   top: 8px;
