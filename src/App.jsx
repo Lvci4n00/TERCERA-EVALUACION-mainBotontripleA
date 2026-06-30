@@ -4,7 +4,6 @@ import Footer from './components/Footer';
 import ContactModal from './components/ContactModal';
 import AuthModal from './components/AuthModal';
 import CartModal from './components/CartModal';
-import AccessibilityButton from './components/AccessibilityButton';
 import Admin from './pages/Admin';
 import { useState, useEffect } from 'react';
 import Home from './pages/Home';
@@ -40,7 +39,6 @@ function App() {
         </Routes>
       </main>
       <ContactModal />
-      <AccessibilityButton />
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
       <CartModal open={cartOpen} onClose={() => setCartOpen(false)} />
       <Footer />

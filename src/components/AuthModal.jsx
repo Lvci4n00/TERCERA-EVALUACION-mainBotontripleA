@@ -1,7 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function AuthModal({ open, onClose }) {
-  const nameRef = useRef(null);
+  const [mode, setMode] = useState('login');
+  const loginEmailRef = useRef(null);
+  const registerNameRef = useRef(null);
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape' && open) onClose(); };
@@ -9,7 +11,17 @@ export default function AuthModal({ open, onClose }) {
     return () => document.removeEventListener('keydown', onKey);
   }, [open, onClose]);
 
-  useEffect(() => { if (open) setTimeout(() => nameRef.current?.focus(), 0); }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    setTimeout(() => {
+      if (mode === 'login') loginEmailRef.current?.focus();
+      else registerNameRef.current?.focus();
+    }, 0);
+  }, [open, mode]);
+
+  useEffect(() => {
+    if (open) setMode('login');
+  }, [open]);
 
   if (!open) return null;
 
@@ -24,6 +36,7 @@ export default function AuthModal({ open, onClose }) {
     localStorage.setItem('users', JSON.stringify(users));
     alert('Cuenta creada correctamente. Ya puedes iniciar sesión.');
     e.target.reset();
+    setMode('login');
   };
 
   const handleLogin = (e) => {
@@ -43,23 +56,32 @@ export default function AuthModal({ open, onClose }) {
       <div className="modal-content" role="document">
         <button className="modal-close" onClick={onClose} aria-label="Cerrar diálogo">×</button>
 
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <section className="footer-form" style={{ flex: '1 1 280px' }}>
+        <div style={{ display: 'flex', gap: '.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+          <button type="button" className="btn" onClick={() => setMode('login')} aria-pressed={mode === 'login'}>
+            Iniciar sesión
+          </button>
+          <button type="button" className="btn" onClick={() => setMode('register')} aria-pressed={mode === 'register'}>
+            Registrarse
+          </button>
+        </div>
+
+        {mode === 'login' ? (
+          <section className="footer-form">
             <h3>Iniciar sesión</h3>
             <form onSubmit={handleLogin}>
               <label>Correo</label>
-              <input name="email" type="email" required />
+              <input ref={loginEmailRef} name="email" type="email" required />
               <label>Contraseña</label>
               <input name="password" type="password" required />
               <button type="submit" className="btn">Entrar</button>
             </form>
           </section>
-
-          <section className="footer-form" style={{ flex: '1 1 280px' }}>
+        ) : (
+          <section className="footer-form">
             <h3>Registrarse</h3>
             <form onSubmit={handleRegister}>
               <label>Nombre</label>
-              <input ref={nameRef} name="name" type="text" required />
+              <input ref={registerNameRef} name="name" type="text" required />
               <label>Correo</label>
               <input name="email" type="email" required />
               <label>Contraseña</label>
@@ -69,7 +91,7 @@ export default function AuthModal({ open, onClose }) {
               <button type="submit" className="btn">Crear cuenta</button>
             </form>
           </section>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ export default function ProductCard({ id, title, image, description, price }) {
     if (next && !specs) {
       setLoading(true);
       try {
-        const res = await fetchSpecsByQuery(title || id);
+        const res = await fetchSpecsByQuery([title, description].filter(Boolean).join(' '));
         setSpecs(res);
       } catch (e) {
         setSpecs(null);
@@ -46,6 +46,7 @@ export default function ProductCard({ id, title, image, description, price }) {
           {!loading && specs && (
             <div>
               <div style={{ fontWeight: 700 }}>{specs.name || specs.title}</div>
+              {specs.category && <div style={{ color: 'var(--muted)', fontSize: '.9rem' }}>Categoría: {specs.category}</div>}
               {specs.specs && typeof specs.specs === 'object' && (
                 <ul style={{ margin: '.5rem 0 0 0', paddingLeft: '1rem' }}>
                   {Object.entries(specs.specs).slice(0,6).map(([k,v]) => (

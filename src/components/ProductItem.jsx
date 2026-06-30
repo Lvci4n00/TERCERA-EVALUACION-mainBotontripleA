@@ -43,6 +43,7 @@ export default function ProductItem({ item, onEdit, onDelete }) {
           {!loading && specs && (
             <div>
               <div style={{ fontWeight: 700 }}>{specs.name || specs.title}</div>
+              {specs.category && <div style={{ color: 'var(--muted)', fontSize: '.9rem' }}>Categoría: {specs.category}</div>}
               {specs.specs && typeof specs.specs === 'object' && (
                 <ul style={{ margin: '.5rem 0 0 0', paddingLeft: '1rem' }}>
                   {Object.entries(specs.specs).slice(0,6).map(([k,v]) => (
